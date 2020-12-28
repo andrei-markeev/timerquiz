@@ -1,0 +1,24 @@
+{
+  "name": "quiz",
+  "author": "Andrei Markeev",
+  "private": true,
+  "scripts": {
+    "serve": "tsc && node build/server/server.js",
+    "start": "nodemon -e ts,tsx -i client -i client-core --exec npm run serve",
+    "start:now": "now dev",
+    "compile": "cd client-core && tsc && cd ../client && tsc && rollup -c && cd ..",
+    "deploy": "now"
+  },
+  "dependencies": {
+    "@types/jws": "^3.2.2",
+    "@types/mongodb": "^3.5.8",
+    "@types/node": "^13.11.1",
+    "axios": "^0.21.1",
+    "jws": "^4.0.0",
+    "mongodb": "^3.6.3"
+  },
+  "devDependencies": {
+    "csstype": "^2.6.10",
+    "typescript": "^3.8.3"
+  }
+}

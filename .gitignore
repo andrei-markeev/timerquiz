@@ -1,0 +1,11 @@
+.now
+node_modules
+build
+.env
+*.js
+*.js.map
+!*.config.js
+
+.vercel
+public/google*.html
+public/uploads

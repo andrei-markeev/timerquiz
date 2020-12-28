@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "target": "ES2015",
+        "sourceMap": true,
+        "module": "CommonJS",
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "strict": true,
+        "jsx": "react",
+        "jsxFactory": "createElement",
+        "resolveJsonModule": true,
+        "outDir": "build/server"
+    },
+    "exclude": ["client", "client-core"]
+}
