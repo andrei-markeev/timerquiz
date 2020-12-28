@@ -10,7 +10,7 @@ export function CenteredPanel(_params: any, children: any[]) {
 CenteredPanel.css = [
     [".centered-panel", {
         maxWidth: "720px",
-        width: "90vw",
+        width: "90%",
         margin: "10px auto"
     }]
 ] as InlineCSSRule[];

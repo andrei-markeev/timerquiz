@@ -1,8 +1,5 @@
-import { ObjectId } from "mongodb";
 import { QuizStatus } from "../lib/Db";
 import { EndpointError, EndpointParams } from "../lib/Endpoint";
-import { AddNewQuestionView } from "./views/editor/AddNewQuestionView";
-import { EditView } from "./views/editor/EditView";
 import { CreateView } from "./views/editor/CreateView";
 
 interface CreateParams {

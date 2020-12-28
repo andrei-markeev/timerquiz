@@ -47,6 +47,8 @@ export function EditView({ userAgent, quiz, questions }: EditViewParams) {
         <ButtonsPanel>
             <a class="btn btn-default" href={ "/edit?quizId=" + quiz._id.toHexString() + "&action=showAddQuestionForm" } >Add new question</a>
             { " "}
+            <a class="btn btn-red" href={ "/edit?quizId=" + quiz._id.toHexString() + "&action=confirmDelete" } >Delete quiz</a>
+            { " "}
             <a class="btn btn-default" href={ "/" } >Back to dashboard</a>
         </ButtonsPanel>
     </Page>;

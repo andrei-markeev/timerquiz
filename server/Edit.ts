@@ -1,6 +1,7 @@
 import { ObjectId } from "mongodb";
 import { EndpointError, EndpointParams } from "../lib/Endpoint";
 import { AddNewQuestionView } from "./views/editor/AddNewQuestionView";
+import { ConfirmDeleteView } from "./views/editor/ConfirmDeleteView";
 import { EditView } from "./views/editor/EditView";
 
 interface EditParams {
@@ -133,7 +134,7 @@ export async function edit({ params, db, user, userAgent }: EndpointParams<EditP
         if (typeof params.deleteQuestion !== "string" || !params.deleteQuestion)
             throw new EndpointError(400, "Invalid request");
 
-        const questionId = new ObjectId(params.editQuestion);
+        const questionId = new ObjectId(params.deleteQuestion);
         const questionIndex = questions.findIndex(q => q._id.equals(questionId));
         if (questionIndex === -1)
             throw new EndpointError(404, "Question not found");
@@ -142,6 +143,9 @@ export async function edit({ params, db, user, userAgent }: EndpointParams<EditP
 
         questions.splice(questionIndex, 1);
     }
+
+    if (params.action === "confirmDelete")
+        return ConfirmDeleteView({ userAgent, quiz });
 
     return EditView({ userAgent, quiz, questions });
 }
