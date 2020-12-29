@@ -19,12 +19,12 @@ export function LoginView({ host, userAgent, error, nonceId }: LoginViewParams) 
             { !!error && <div class="error">{ error }</div> }
             <p>
                 Authentication is OAuth-based so your password is never exposed to Timer Quiz.
-                Timer Quiz only receives and stores your Google ID number so that it can identify you.
-                Your name, email, or any other details, are never exposed.
+                Timer Quiz only receives and stores your numeric Google ID so that it can identify you and your quizzes aren't lost.
+                Timer Quiz doesn't have access to your email, name or any other info.
             </p>
             <p>
                 If you don't have a Timer Quiz account yet, it will be automatically created.
-                You can delete it any time - all associated information is fully purged from the system.
+                You can delete it any time - all associated information is completely purged from the system.
                 We don't store any backups.
             </p>
             <input type="hidden" name="response_type" value="code" />
