@@ -29,9 +29,6 @@ export async function edit({ params, db, user, userAgent }: EndpointParams<EditP
 
     const questions = await db.Questions.find({ quizId }).toArray();
    
-    if (questions.length === 0)
-        return AddNewQuestionView({ userAgent, quiz });
-
     if (params.deleteQuestion)
         return await deleteQuestion({ params, db, userAgent, quiz, questions });
 
@@ -52,6 +49,9 @@ export async function edit({ params, db, user, userAgent }: EndpointParams<EditP
             await db.Questions.deleteMany({ quizId: quiz._id });
             return { redirectTo: "/" };
     }
+
+    if (questions.length === 0)
+        return AddNewQuestionView({ userAgent, quiz });
 
     return EditView({ userAgent, quiz, questions });
 }

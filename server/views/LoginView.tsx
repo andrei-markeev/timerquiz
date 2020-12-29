@@ -17,6 +17,16 @@ export function LoginView({ host, userAgent, error, nonceId }: LoginViewParams) 
         <form method="GET" action="https://accounts.google.com/o/oauth2/v2/auth">
             <h1>Log in</h1>
             { !!error && <div class="error">{ error }</div> }
+            <p>
+                Authentication is OAuth-based so your password is never exposed to Timer Quiz.
+                Timer Quiz only receives and stores your Google ID number so that it can identify you.
+                Your name, email, or any other details, are never exposed.
+            </p>
+            <p>
+                If you don't have a Timer Quiz account yet, it will be automatically created.
+                You can delete it any time - all associated information is fully purged from the system.
+                We don't store any backups.
+            </p>
             <input type="hidden" name="response_type" value="code" />
             <input type="hidden" name="access_type" value="online" />
             <input type="hidden" name="client_id" value={ process.env.GOOGLE_APP_ID } />
@@ -25,6 +35,8 @@ export function LoginView({ host, userAgent, error, nonceId }: LoginViewParams) 
             <input type="hidden" name="redirect_uri" value={ protocol + host + "/api/user/google" } />
             <ButtonsPanel>
                 <input class="btn btn-default" type="submit" value="Log in with Google"></input>
+                { " " }
+                <a class="btn btn-default" href="/privacy.html">Privacy Policy</a>
                 { " " }
                 <a class="btn btn-default" href="/">Back</a>
             </ButtonsPanel>

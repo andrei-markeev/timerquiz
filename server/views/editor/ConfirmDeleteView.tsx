@@ -10,9 +10,10 @@ interface ConfirmDeleteViewParams {
 export function ConfirmDeleteView({ userAgent, quiz }: ConfirmDeleteViewParams) {
     const cssRules = [ ConfirmDeleteView, ButtonCss, DefaultButtonCss, RedButtonCss ];
     return <Page userAgent={ userAgent } title={ "Delete quiz" } cssRules={ cssRules }>
-        <form method="POST" action="delete">
+        <form method="POST">
             <h1>Delete quiz {quiz.name}</h1>
             <p>Are you sure want to delete quiz {quiz.name}? This action cannot be undone!</p>
+            <input type="hidden" name="action" value="deleteQuiz" />
             <input type="hidden" name="quizId" value={ quiz._id.toHexString() } />
             <input type="submit" class="btn btn-red" value="Delete" />
             { " " }

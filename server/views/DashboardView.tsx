@@ -12,7 +12,12 @@ interface DashboardViewParams {
 export function DashboardView({ user, quizzes, userAgent }: DashboardViewParams) {
     const cssRules = [ DashboardView, ButtonCss, DefaultButtonCss, BlueButtonCss, GreenButtonCss, RedButtonCss ];
     return <Page title={ "Quiz Dashboard" } userAgent={ userAgent } cssRules={ cssRules }>
-        <h1>Welcome! <a class="btn btn-default" href="/logout">Log out</a></h1>
+        <h1>Welcome!
+            { " " }
+            <a class="btn btn-default" href="/logout">Log out</a>
+            { " " }
+            <a class="btn btn-red" href="/logout?action=confirmPurge">Delete my account</a>
+        </h1>
         <p>List of your quizzes</p>
         <form method="POST" action="/manage">
             <ol>
