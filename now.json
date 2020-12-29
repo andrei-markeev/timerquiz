@@ -5,7 +5,6 @@
         { "source": "/join", "destination": "/api/quiz/join" },
         { "source": "/create", "destination": "/api/quiz/create" },
         { "source": "/edit", "destination": "/api/quiz/edit" },
-        { "source": "/delete", "destination": "/api/quiz/delete" },
         { "source": "/manage", "destination": "/api/quiz/manage" },
         { "source": "/present", "destination": "/api/quiz/present" },
         { "source": "/play", "destination": "/api/quiz/play" },
