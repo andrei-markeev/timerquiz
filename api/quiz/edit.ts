@@ -1,4 +1,5 @@
 import { createEndpoint } from "../../lib/Endpoint";
-import { edit } from "../../server/Edit";
+import { editGet } from "../../server/EditGet";
+import { editPost } from "../../server/EditPost";
 
-export default createEndpoint(edit);
+export default createEndpoint({ get: editGet, post: editPost });

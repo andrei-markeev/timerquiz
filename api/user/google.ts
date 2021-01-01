@@ -1,4 +1,4 @@
 import { createEndpoint } from "../../lib/Endpoint";
-import { loginWithGoogle } from "../../server/LoginWithGoogle";
+import { loginWithGoogleGet } from "../../server/LoginWithGoogleGet";
 
-export default createEndpoint(loginWithGoogle);
+export default createEndpoint({ get: loginWithGoogleGet });

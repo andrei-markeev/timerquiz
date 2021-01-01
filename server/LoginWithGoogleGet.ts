@@ -1,11 +1,12 @@
 import { ObjectId } from "mongodb";
-import { EndpointError, EndpointParams } from "../lib/Endpoint";
+import { EndpointError, GetEndpointParams } from "../lib/Endpoint";
 import { decode } from "jws";
 import axios from "axios";
 import { createHash, randomBytes } from "crypto";
 import { stringify } from "querystring";
+import { isObjectIdHexString } from "../lib/Validators";
 
-interface OAuthRedirectQueryString {
+interface OAuthRedirectQuery {
     state: string;
     code: string;
 }
@@ -15,8 +16,10 @@ interface GoogleOAuthResponse {
     id_token: string;
 }
 
-export async function loginWithGoogle({ params, db, host }: EndpointParams<OAuthRedirectQueryString>) {
-    const nonce = await db.Nonces.findOne({ _id: new ObjectId(params.state) });
+export async function loginWithGoogleGet({ query, db, host }: GetEndpointParams<OAuthRedirectQuery>) {
+    if (!isObjectIdHexString(query.state))
+        throw new EndpointError(400, "Invalid request");
+    const nonce = await db.Nonces.findOne({ _id: new ObjectId(query.state) });
     if (!nonce)
         throw new EndpointError(403, "Security validation failed");
 
@@ -29,7 +32,7 @@ export async function loginWithGoogle({ params, db, host }: EndpointParams<OAuth
         `https://oauth2.googleapis.com/token`,
         stringify({
             grant_type: 'authorization_code',
-            code: params.code as string,
+            code: query.code as string,
             client_id: process.env.GOOGLE_APP_ID,
             client_secret: process.env.GOOGLE_APP_SECRET,
             redirect_uri: hostUrl + "/api/user/google"

@@ -8,7 +8,6 @@
         { "source": "/manage", "destination": "/api/quiz/manage" },
         { "source": "/present", "destination": "/api/quiz/present" },
         { "source": "/play", "destination": "/api/quiz/play" },
-        { "source": "/answer", "destination": "/api/quiz/answer" },
         { "source": "/login", "destination": "/api/user/login" },
         { "source": "/logout", "destination": "/api/user/logout" },
         { "source": "/api/user/google", "destination": "/api/user/google" }

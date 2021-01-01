@@ -5,8 +5,7 @@ import { ObjectId } from "mongodb";
 import { ServerSideHtml } from "./templates";
 import { createHash } from "crypto";
 
-export interface EndpointParams<T> {
-    params: T;
+interface EndpointParamsBase {
     db: QuizDb;
     userAgent: string;
     host: string;
@@ -14,6 +13,17 @@ export interface EndpointParams<T> {
     usedToken: StampedToken | null;
     validTokens: StampedToken[];
 }
+export interface PostEndpointParams<B> extends EndpointParamsBase {
+    body: Untrusted<B>;
+}
+
+export interface GetEndpointParams<Q = never> extends EndpointParamsBase {
+    query: Untrusted<Q>;
+}
+
+type Untrusted<T> = {
+    [P in keyof T]?: any;
+};
 
 type EndpointResponse = ServerSideHtml | {
     redirectTo?: string;
@@ -21,20 +31,27 @@ type EndpointResponse = ServerSideHtml | {
     text?: string;
 };
 
-export function createEndpoint<T>(handler: (params: EndpointParams<T>) => Promise<EndpointResponse>) {
-    return async function(request: PreprocessedRequest<T>, response: ServerResponse) {
+export function createEndpoint<B, Q>(options: {
+    post?: (params: PostEndpointParams<B>) => Promise<EndpointResponse>,
+    get?: (params: GetEndpointParams<Q>) => Promise<EndpointResponse>,
+}) {
+    return async function(request: PreprocessedRequest, response: ServerResponse) {
+        console.time("Endpoint");
         try {
             const host = request.headers.host!;
             const userId = request.cookies.userId;
             const token = request.cookies.token;
             const userAgent = request.headers["user-agent"] || "";
 
-            const params = request.body || request.query;
+            const body = request.body;
+            const query = request.query;
 
             let user: User | null = null;
-
+            console.time("DbConnect");
             const db = await connectToDatabase();
+            console.timeEnd("DbConnect");
 
+            console.time("Auth");
             let usedToken: StampedToken | null = null;
             let validTokens: StampedToken[] = [];
             if (userId) {
@@ -54,8 +71,17 @@ export function createEndpoint<T>(handler: (params: EndpointParams<T>) => Promis
                 if (!usedToken)
                     user = null;
             }
+            console.timeEnd("Auth");
     
-            const result = await handler({ params, db, user, userAgent, host, usedToken, validTokens });
+            console.time("Handler");
+            let result
+            if (request.method === "POST" && options.post)
+                result = await options.post({ body, db, user, userAgent, host, usedToken, validTokens });
+            else if (request.method === "GET" && options.get)
+                result = await options.get({ query, db, user, userAgent, host, usedToken, validTokens });
+            else
+                throw new EndpointError(400, "Invalid request");
+            console.timeEnd("Handler");
 
             if ("html" in result) {
                 response.writeHead(200, { "Content-Type": "text/html" });
@@ -86,6 +112,7 @@ export function createEndpoint<T>(handler: (params: EndpointParams<T>) => Promis
             response.writeHead(code, { "Content-Type": "text/plain" });
             response.end(message);
         }
+        console.timeEnd("Endpoint");
     }
 }
 

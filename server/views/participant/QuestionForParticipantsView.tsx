@@ -18,7 +18,7 @@ export function QuestionForParticipantsView({ quiz, participantId, question, use
     const ajaxBody = stringify({ pin: quiz.pinCode, participantId, ajax: true });
     return <Page title={ quiz.name } userAgent={ userAgent } cssRules={ cssRules }>
         <CountDown questionStartMs={ quiz.questionStartMs } secondsToThink={ question.secondsToThink } />
-        <form method="POST" action="/answer">
+        <form method="POST">
             <h1>{ question.text }</h1>
             <input type="hidden" name="pin" value={ quiz.pinCode || "" } />
             <input type="hidden" name="participantId" value={ participantId } />

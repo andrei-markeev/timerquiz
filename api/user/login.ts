@@ -1,4 +1,4 @@
 import { createEndpoint } from "../../lib/Endpoint";
-import { login } from "../../server/Login";
+import { loginGet } from "../../server/LoginGet";
 
-export default createEndpoint(login);
+export default createEndpoint({ get: loginGet });

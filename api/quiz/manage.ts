@@ -1,4 +1,4 @@
 import { createEndpoint } from "../../lib/Endpoint";
-import { manage } from "../../server/Manage";
+import { managePost } from "../../server/ManagePost";
 
-export default createEndpoint(manage);
+export default createEndpoint({ post: managePost });

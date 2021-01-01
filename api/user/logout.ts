@@ -1,4 +1,5 @@
 import { createEndpoint } from "../../lib/Endpoint";
-import { logout } from "../../server/Logout";
+import { logoutGet } from "../../server/logoutGet";
+import { logoutPost } from "../../server/LogoutPost";
 
-export default createEndpoint(logout);
+export default createEndpoint({ get: logoutGet, post: logoutPost });

@@ -1,4 +1,4 @@
 import { createEndpoint } from "../../lib/Endpoint";
-import { play } from "../../server/Play";
+import { playPost } from "../../server/PlayPost";
 
-export default createEndpoint(play);
+export default createEndpoint({ post: playPost });

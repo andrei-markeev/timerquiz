@@ -17,7 +17,7 @@ function preprocessRequest(request: http.IncomingMessage, response: http.ServerR
         }
     }
     const parsedUrl = url.parse(request.url || "/");
-    const preprocessed = request as PreprocessedRequest<any>;
+    const preprocessed = request as PreprocessedRequest;
     preprocessed.url = parsedUrl.pathname!;
     preprocessed.query = querystring.parse(parsedUrl.query || "");
     preprocessed.cookies = cookies;
@@ -50,7 +50,7 @@ function preprocessRequest(request: http.IncomingMessage, response: http.ServerR
         matchRoute(preprocessed, response);
 }
 
-function matchRoute(request: PreprocessedRequest<any>, response: http.ServerResponse) {
+function matchRoute(request: PreprocessedRequest, response: http.ServerResponse) {
     const url = request.url;
     if (!url)
         return;

@@ -1,4 +1,5 @@
 import { createEndpoint } from "../../lib/Endpoint";
-import { create } from "../../server/Create";
+import { createPost } from "../../server/CreatePost";
+import { createGet } from "../../server/CreateGet";
 
-export default createEndpoint(create);
+export default createEndpoint({ get: createGet, post: createPost });

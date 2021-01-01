@@ -2,10 +2,10 @@ import { IncomingMessage } from "http";
 
 declare global {
 
-    type PreprocessedRequest<T> = IncomingMessage & {
-        query: T;
+    type PreprocessedRequest = IncomingMessage & {
+        query: any;
         cookies: { [key: string]: string; };
-        body: T;
+        body: any;
     }
 
     /** Date in format "YYYY-MM-DD" */

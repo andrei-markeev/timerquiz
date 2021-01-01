@@ -1,5 +1,6 @@
 import { QuizStatus } from "../lib/Db";
-import { EndpointError, EndpointParams } from "../lib/Endpoint";
+import { EndpointError, PostEndpointParams } from "../lib/Endpoint";
+import { isObjectIdHexString } from "../lib/Validators";
 import { DashboardView } from "./views/DashboardView";
 import { WaitForParticipantsView } from "./views/WaitForParticipantsView";
 
@@ -8,24 +9,24 @@ interface StartParams {
     stop: string;
 }
 
-export async function manage({ params, db, user, userAgent }: EndpointParams<StartParams>) {
+export async function managePost({ body, db, user, userAgent }: PostEndpointParams<StartParams>) {
     if (!user)
         throw new EndpointError(403, "Access denied");
 
-    if (params.start && typeof params.start !== "string")
+    if (body.start && !isObjectIdHexString(body.start))
         throw new EndpointError(400, "Invalid request");
-    if (params.stop && typeof params.stop !== "string")
+    if (body.stop && !isObjectIdHexString(body.stop))
         throw new EndpointError(400, "Invalid request");
-    if (params.start && params.stop || !params.start && !params.stop)
+    if (body.start && body.stop || !body.start && !body.stop)
         throw new EndpointError(400, "Invalid request");
 
-    const quizId = params.start || params.stop;
+    const quizId = body.start || body.stop;
     const quizzes = await db.Quizzes.find({ ownerUserId: user._id }).toArray();
     const quiz = quizzes.find(q => q._id.equals(quizId));
     if (!quiz)
         throw new EndpointError(404, "Quiz not found");
 
-    if (params.start) {
+    if (body.start) {
         if (quizzes.some(q => q.status === QuizStatus.Started || q.status === QuizStatus.Open))
             throw new EndpointError(400, "You already have a started quiz!");
 

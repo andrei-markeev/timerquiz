@@ -1,4 +1,5 @@
 import { createEndpoint } from "../../lib/Endpoint";
-import { present } from "../../server/Present";
+import { presentGet } from "../../server/PresentGet";
+import { presentPost } from "../../server/PresentPost";
 
-export default createEndpoint(present);
+export default createEndpoint({ get: presentGet, post: presentPost });

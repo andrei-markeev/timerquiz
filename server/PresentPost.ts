@@ -1,5 +1,5 @@
 import { QuizStatus } from "../lib/Db";
-import { EndpointError, EndpointParams } from "../lib/Endpoint";
+import { EndpointError, PostEndpointParams } from "../lib/Endpoint";
 import { QuestionView } from "./views/QuestionView";
 import { ScoreView } from "./views/ScoreView";
 import { WaitForParticipantsView } from "./views/WaitForParticipantsView";
@@ -8,7 +8,7 @@ interface PresentParams {
     action?: string;
 }
 
-export async function present({ params, db, userAgent, user }: EndpointParams<PresentParams>) {
+export async function presentPost({ body, db, userAgent, user }: PostEndpointParams<PresentParams>) {
     if (!user)
         return { redirectTo: "/login" };
 
@@ -16,7 +16,7 @@ export async function present({ params, db, userAgent, user }: EndpointParams<Pr
     if (!quiz)
         throw new EndpointError(404, "Quiz not found!");
 
-    if (quiz.status === QuizStatus.Open && params.action === "start") {
+    if (quiz.status === QuizStatus.Open && body.action === "start") {
         const firstQuestion = await db.Questions.findOne({ quizId: quiz._id }, { sort: { order: 1 } });
         if (!firstQuestion)
             throw new EndpointError(404, "First question not found!");
@@ -31,7 +31,7 @@ export async function present({ params, db, userAgent, user }: EndpointParams<Pr
     }
 
     if (quiz.status === QuizStatus.Open) {
-        if (params.action === "refresh")
+        if (body.action === "refresh")
             return { text: quiz.participants.map(p => p.id).join(",") };
         else
             return WaitForParticipantsView({ quiz, userAgent });
@@ -45,7 +45,7 @@ export async function present({ params, db, userAgent, user }: EndpointParams<Pr
 
     const questionId = quiz.questionId;
 
-    if (params.action === "nextQuestion") {
+    if (body.action === "nextQuestion") {
         const questions = await db.Questions.find({ quizId: quiz._id }, { sort: { order: 1 } }).toArray();
         const index = questions.findIndex(q => q._id.equals(questionId));
         if (index === -1)
@@ -66,7 +66,7 @@ export async function present({ params, db, userAgent, user }: EndpointParams<Pr
     }
 
     if (quiz.participants.every(p => p.answeredMs > quiz.questionStartMs)) {
-        if (params.action === "refresh")
+        if (body.action === "refresh")
             return { text: "Wait" };
         else
             return ScoreView({ quiz, userAgent });
@@ -77,13 +77,13 @@ export async function present({ params, db, userAgent, user }: EndpointParams<Pr
         throw new EndpointError(404, "Question not found!");
 
     if (Date.now() - quiz.questionStartMs > question.secondsToThink * 1000) {
-        if (params.action === "refresh")
+        if (body.action === "refresh")
             return { text: "Wait" };
         else
             return ScoreView({ quiz, userAgent });
     }
 
-    if (params.action === "refresh")
+    if (body.action === "refresh")
         return { text: "Question" };
     else
         return QuestionView({ quiz, question, userAgent });

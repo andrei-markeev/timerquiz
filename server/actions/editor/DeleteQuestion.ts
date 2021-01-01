@@ -1,11 +1,12 @@
 import { ObjectId } from "mongodb";
 import { QuizDb } from "../../../lib/Db";
 import { EndpointError } from "../../../lib/Endpoint";
+import { isObjectIdHexString } from "../../../lib/Validators";
 import { EditView } from "../../views/editor/EditView";
 
 interface DeleteQuestionParams {
-    params: {
-        deleteQuestion: any;
+    body: {
+        deleteQuestion?: any;
     };
     db: QuizDb;
     userAgent: string;
@@ -13,11 +14,11 @@ interface DeleteQuestionParams {
     questions: Question[];
 }
 
-export async function deleteQuestion({ params, db, userAgent, quiz, questions }: DeleteQuestionParams) {
-    if (typeof params.deleteQuestion !== "string" || !params.deleteQuestion)
+export async function deleteQuestion({ body, db, userAgent, quiz, questions }: DeleteQuestionParams) {
+    if (!isObjectIdHexString(body.deleteQuestion))
         throw new EndpointError(400, "Invalid request");
 
-    const questionId = new ObjectId(params.deleteQuestion);
+    const questionId = new ObjectId(body.deleteQuestion);
     const questionIndex = questions.findIndex(q => q._id.equals(questionId));
     if (questionIndex === -1)
         throw new EndpointError(404, "Question not found");

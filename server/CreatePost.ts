@@ -1,26 +1,21 @@
 import { QuizStatus } from "../lib/Db";
-import { EndpointError, EndpointParams } from "../lib/Endpoint";
+import { EndpointError, PostEndpointParams } from "../lib/Endpoint";
+import { isNonEmptyString } from "../lib/Validators";
 import { CreateView } from "./views/editor/CreateView";
 
-interface CreateParams {
-    quizName?: string;
+interface CreatePostParams {
+    quizName: string;
 }
 
-export async function create({ params, db, user, userAgent }: EndpointParams<CreateParams>) {
+export async function createPost({ body, db, user, userAgent }: PostEndpointParams<CreatePostParams>) {
     if (!user)
         throw new EndpointError(403, "Access denied");
 
-    if (params.quizName && params.quizName.length <= 0)
+    if (!isNonEmptyString(body.quizName))
         return CreateView({ userAgent, error: "Please enter the name of the quiz!" });
 
-    if (!params.quizName)
-        return CreateView({ userAgent });
-
-    if (typeof params.quizName !== "string")
-        throw new EndpointError(400, "Invalid request");
-
     const result = await db.Quizzes.insertOne({
-        name: params.quizName,
+        name: body.quizName,
         ownerUserId: user._id,
         pinCode: null,
         participants: [],
