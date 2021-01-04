@@ -21,7 +21,7 @@ export function AddNewQuestionView({ userAgent, quiz, first }: AddNewQuestionVie
             <div class="spacer" />
             <input class="btn btn-blue" type="submit" value="Add" />
             { " " }
-            { !first && <a class="btn btn-default" href={ "/edit?quizId=" + quiz._id.toHexString() }>Cancel</a> }
+            { <a class="btn btn-default" href={ first ? "/" : "/edit?quizId=" + quiz._id.toHexString() }>Cancel</a> }
         </form>
     </Page>;
 }

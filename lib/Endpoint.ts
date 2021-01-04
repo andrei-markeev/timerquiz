@@ -14,7 +14,7 @@ interface EndpointParamsBase {
     validTokens: StampedToken[];
 }
 export interface PostEndpointParams<B> extends EndpointParamsBase {
-    body: Untrusted<B>;
+    body: Untrusted<B & { csrfToken: string }>;
 }
 
 export interface GetEndpointParams<Q = never> extends EndpointParamsBase {

@@ -13,6 +13,11 @@ export enum QuizStatus {
     Started = "started"
 }
 
+
+
+
 export enum NonceType {
-    GoogleOAuth = 1
+    GoogleOAuth = 1,
+    CreateQuizCsrf = 2,
+    DeleteAccountCsrf
 }

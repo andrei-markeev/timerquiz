@@ -4,10 +4,11 @@ import { Page } from "../../components/Page";
 
 interface CreateViewParams {
     userAgent: string;
+    csrfToken: string;
     error?: string;
 }
 
-export function CreateView({ userAgent, error }: CreateViewParams) {
+export function CreateView({ userAgent, csrfToken, error }: CreateViewParams) {
     const cssRules = [ CreateView, ButtonCss, DefaultButtonCss, BlueButtonCss ];
     return <Page userAgent={ userAgent } title={ "Create a new quiz" } cssRules={ cssRules }>
         <form method="POST">
@@ -18,6 +19,7 @@ export function CreateView({ userAgent, error }: CreateViewParams) {
                 <input type="text" name="quizName" value="" />
             </div>
             <input type="hidden" name="action" value="create" />
+            <input type="hidden" name="csrfToken" value={ csrfToken } />
             <div class="spacer" />
             <input type="submit" class="btn btn-blue" value="Next" />
             { " " }

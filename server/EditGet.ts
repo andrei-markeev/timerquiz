@@ -31,7 +31,7 @@ export async function editGet({ query,  db, user, userAgent }: GetEndpointParams
 
     const questions = await db.Questions.find({ quizId }).toArray();
     if (questions.length === 0)
-        return AddNewQuestionView({ userAgent, quiz });
+        return AddNewQuestionView({ userAgent, quiz, first: true });
     else
         return EditView({ userAgent, quiz, questions });
 }
