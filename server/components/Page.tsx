@@ -41,5 +41,14 @@ Page.css = [
         fontSize: "20px",
         fontFamily: "sans-serif",
         fontWeight: 300
-    }]
+    }],
+    {
+        media: "(prefers-color-scheme: dark)",
+        styles: [
+            ["body", {
+                backgroundColor: "#141516",
+                color: "#cfd0d4",
+            }]
+        ]
+    }
 ] as InlineCSSRule[];

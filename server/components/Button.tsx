@@ -51,7 +51,10 @@ export const ButtonCss = { css: [
     }]
 ] as InlineCSSRule[]};
 
-export const DefaultButtonCss = { css: buttonColorCss("default","#333333",{ bg: "#ffffff", active: "#ebebeb" },{ border: "#cccccc", active: "#adadad" }) };
+export const DefaultButtonCss = { css: 
+    buttonColorCss("default","#333333",{ bg: "#ffffff", active: "#ebebeb" },{ border: "#cccccc", active: "#adadad" })
+    .concat(buttonColorDarkModeCss("default","#ffffff",{ bg: "#505050", active: "#606060" },{ border: "#aaaaaa", active: "#8d8d8d" }))
+};
 export const RedButtonCss = { css: buttonColorCss("red","#ffffff",{ bg: "#ff4b2f", active: "#ff573d" },{ border: "#d94129", active: "#d94c36" }) };
 export const YellowButtonCss = { css: buttonColorCss("yellow","#333333",{ bg: "#ffe400", active: "#ffe71c" },{ border: "#e3cb00", active: "#e3cd17" }) };
 export const GreenButtonCss = { css: buttonColorCss("green","#ffffff",{ bg: "#14A76C", active: "#21b077" },{ border: "#118a59", active: "#1b9463" }) };
@@ -73,5 +76,14 @@ function buttonColorCss(name: string, color: string, bgColor: { bg: string, acti
             backgroundColor: bgColor.bg,
             borderColor: borderColor.border
         }]
+    ] as InlineCSSRule[];
+}
+
+function buttonColorDarkModeCss(name: string, color: string, bgColor: { bg: string, active: string}, borderColor: { border: string, active: string}) {
+    return [
+        {
+            media: "(prefers-color-scheme: dark)",
+            styles: buttonColorCss(name, color, bgColor, borderColor)
+        }
     ] as InlineCSSRule[];
 }

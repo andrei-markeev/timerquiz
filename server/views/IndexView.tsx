@@ -26,7 +26,7 @@ export function IndexView({ userAgent }: IndexViewParams) {
                     <a class="btn btn-default" href="/privacy.html">Privacy Policy</a>
                 </ButtonsPanel>
             </p>
-            <h1>How does it work?</h1>
+            <h2>How does it work?</h2>
             <h3>Step 1: Sign up</h3>
             <p class="description">
                 We don't store your email, phone or any other personal data. Not even name.
@@ -97,5 +97,14 @@ IndexView.css = [
         marginRight: "10px",
         display: "inline-block",
         verticalAlign: "top"
-    }]
+    }],
+    ["a.link", {
+        color: "#44707d"
+    }],
+    {
+        media: "(prefers-color-scheme: dark)",
+        styles: ["a.link", {
+            color: "#9ce3ff"
+        }]
+    }
 ] as InlineCSSRule[];
