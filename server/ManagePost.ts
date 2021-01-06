@@ -1,4 +1,5 @@
 import { QuizStatus } from "../lib/Db";
+import { connectToDatabase } from "../lib/DbUtils";
 import { EndpointError, PostEndpointParams } from "../lib/Endpoint";
 import { isObjectIdHexString } from "../lib/Validators";
 import { DashboardView } from "./views/DashboardView";
@@ -9,7 +10,7 @@ interface StartParams {
     stop: string;
 }
 
-export async function managePost({ body, db, user, userAgent }: PostEndpointParams<StartParams>) {
+export async function managePost({ body, user, userAgent }: PostEndpointParams<StartParams>) {
     if (!user)
         throw new EndpointError(403, "Access denied");
 
@@ -21,6 +22,7 @@ export async function managePost({ body, db, user, userAgent }: PostEndpointPara
         throw new EndpointError(400, "Invalid request");
 
     const quizId = body.start || body.stop;
+    const db = await connectToDatabase();
     const quizzes = await db.Quizzes.find({ ownerUserId: user._id }).toArray();
     const quiz = quizzes.find(q => q._id.equals(quizId));
     if (!quiz)

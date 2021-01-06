@@ -1,4 +1,5 @@
 import { ObjectId } from "mongodb";
+import { connectToDatabase } from "../lib/DbUtils";
 import { EndpointError, GetEndpointParams } from "../lib/Endpoint";
 import { isObjectIdHexString } from "../lib/Validators";
 import { AddNewQuestionView } from "./views/editor/AddNewQuestionView";
@@ -10,7 +11,7 @@ interface EditQuery {
     action: string;
 }
 
-export async function editGet({ query,  db, user, userAgent }: GetEndpointParams<EditQuery>) {
+export async function editGet({ query,  user, userAgent }: GetEndpointParams<EditQuery>) {
     if (!user)
         throw new EndpointError(403, "Access denied");
 
@@ -18,6 +19,7 @@ export async function editGet({ query,  db, user, userAgent }: GetEndpointParams
         throw new EndpointError(400, "Invalid request");
 
     const quizId = new ObjectId(query.quizId);
+    const db = await connectToDatabase();
     const quiz = await db.Quizzes.findOne({ _id: quizId, ownerUserId: user._id });
     if (!quiz)
         throw new EndpointError(404, "Quiz not found");

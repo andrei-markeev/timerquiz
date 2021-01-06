@@ -5,6 +5,7 @@ import axios from "axios";
 import { createHash, randomBytes } from "crypto";
 import { stringify } from "querystring";
 import { isObjectIdHexString } from "../lib/Validators";
+import { connectToDatabase } from "../lib/DbUtils";
 
 interface OAuthRedirectQuery {
     state: string;
@@ -16,9 +17,10 @@ interface GoogleOAuthResponse {
     id_token: string;
 }
 
-export async function loginWithGoogleGet({ query, db, host }: GetEndpointParams<OAuthRedirectQuery>) {
+export async function loginWithGoogleGet({ query, host }: GetEndpointParams<OAuthRedirectQuery>) {
     if (!isObjectIdHexString(query.state))
         throw new EndpointError(400, "Invalid request");
+    const db = await connectToDatabase();
     const nonce = await db.Nonces.findOne({ _id: new ObjectId(query.state) });
     if (!nonce)
         throw new EndpointError(403, "Security validation failed");

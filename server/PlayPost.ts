@@ -1,4 +1,5 @@
 import { QuizStatus } from "../lib/Db";
+import { connectToDatabase } from "../lib/DbUtils";
 import { EndpointError, PostEndpointParams } from "../lib/Endpoint";
 import { isGamePin, isParticipantId } from "../lib/Validators";
 import { PleaseWaitView } from "./views/participant/PleaseWaitView";
@@ -13,7 +14,7 @@ interface PlayParams {
     ajax?: boolean;
 }
 
-export async function playPost({ body, db, userAgent }: PostEndpointParams<PlayParams>) {
+export async function playPost({ body, userAgent }: PostEndpointParams<PlayParams>) {
     if (!isParticipantId(body.participantId))
         throw new EndpointError(400, "Bad request");
 
@@ -23,6 +24,7 @@ export async function playPost({ body, db, userAgent }: PostEndpointParams<PlayP
     if (body.ajax && body.answer != null)
         throw new EndpointError(400, "Bad request");
 
+    const db = await connectToDatabase();
     const quiz = await db.Quizzes.findOne({ pinCode: body.pin });
     if (!quiz)
         throw new EndpointError(404, "Page not found");

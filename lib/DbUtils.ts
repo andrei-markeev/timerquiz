@@ -4,6 +4,7 @@ import url from "url";
 let cachedDb: Db | null = null;
 export async function connectToDatabase() {
     if (!cachedDb) {
+        console.time("DbConnect");
         if (!process.env.MONGO_URL)
             throw new Error("MONGO_URL is not defined!");
         const dbname = url.parse(process.env.MONGO_URL).pathname?.substr(1);
@@ -12,6 +13,7 @@ export async function connectToDatabase() {
         const client = await MongoClient.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true });
         const db = await client.db(dbname);
         cachedDb = db;
+        console.timeEnd("DbConnect");
     }
     return {
         Questions: cachedDb.collection<Question>("questions"),

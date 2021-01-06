@@ -1,15 +1,17 @@
 import { validateCsrfToken } from "../lib/CsrfToken";
 import { NonceType } from "../lib/Db";
+import { connectToDatabase } from "../lib/DbUtils";
 import { EndpointError, PostEndpointParams } from "../lib/Endpoint";
 
 interface LogoutParams {
     action: string;
 }
 
-export async function logoutPost({ body, db, user }: PostEndpointParams<LogoutParams>) {
+export async function logoutPost({ body, user }: PostEndpointParams<LogoutParams>) {
     if (!user)
         throw new EndpointError(403, "Access denied!");
 
+    const db = await connectToDatabase();
     await validateCsrfToken(db, NonceType.DeleteAccountCsrf, body.csrfToken);
 
     if (body.action !== "purge")

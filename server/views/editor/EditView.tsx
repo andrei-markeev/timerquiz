@@ -59,10 +59,17 @@ EditView.css = [
         marginTop: "10px",
         marginBottom: "18px"
     }],
-    [".inline-edit h1, .inline-edit h2, .inline-edit h3", {
-        display: "inline-block"
+    [".inline-edit h1", {
+        display: "inline"
     }],
     [".inline-edit", {
         marginBottom: "18px"
+    }],
+    [".inline-edit .view.btn.btn-default", {
+        display: "inline-block",
+        marginTop: "3px"
+    }],
+    ['.view.btn.btn-default[for="inline-edit-name"]', {
+        verticalAlign: "bottom"
     }]
 ] as InlineCSSRule[];

@@ -1,5 +1,6 @@
 import { generateCsrfToken } from "../lib/CsrfToken";
 import { NonceType } from "../lib/Db";
+import { connectToDatabase } from "../lib/DbUtils";
 import { EndpointError, GetEndpointParams } from "../lib/Endpoint";
 import { ConfirmPurgeView } from "./views/ConfirmPurgeView";
 
@@ -8,10 +9,11 @@ interface LogoutQuery {
     action: string;
 }
 
-export async function logoutGet({ query, db, user, userAgent, usedToken, validTokens }: GetEndpointParams<LogoutQuery>) {
+export async function logoutGet({ query, user, userAgent, usedToken, validTokens }: GetEndpointParams<LogoutQuery>) {
     if (!user)
         return { redirectTo: "/" };
 
+    const db = await connectToDatabase();
     if (query.action === "confirmPurge") {
         const csrfToken = await generateCsrfToken(db, NonceType.DeleteAccountCsrf);
         return ConfirmPurgeView({ userAgent, csrfToken });

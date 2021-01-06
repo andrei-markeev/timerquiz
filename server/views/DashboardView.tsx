@@ -9,7 +9,7 @@ interface DashboardViewParams {
     userAgent: string;
 }
 
-export function DashboardView({ user, quizzes, userAgent }: DashboardViewParams) {
+export function DashboardView({ quizzes, userAgent }: DashboardViewParams) {
     const cssRules = [ DashboardView, ButtonCss, DefaultButtonCss, BlueButtonCss, GreenButtonCss, RedButtonCss ];
     return <Page title={ "Quiz Dashboard" } userAgent={ userAgent } cssRules={ cssRules }>
         <h1>Welcome!
@@ -42,5 +42,8 @@ export function DashboardView({ user, quizzes, userAgent }: DashboardViewParams)
     </Page>;
 }
 DashboardView.css = [
+    ["li .btn", {
+        marginBottom: "8px"
+    }]
 ] as InlineCSSRule[];
 

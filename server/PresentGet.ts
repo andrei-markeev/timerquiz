@@ -1,13 +1,15 @@
 import { QuizStatus } from "../lib/Db";
+import { connectToDatabase } from "../lib/DbUtils";
 import { EndpointError, GetEndpointParams } from "../lib/Endpoint";
 import { QuestionView } from "./views/QuestionView";
 import { ScoreView } from "./views/ScoreView";
 import { WaitForParticipantsView } from "./views/WaitForParticipantsView";
 
-export async function presentGet({ db, userAgent, user }: GetEndpointParams) {
+export async function presentGet({ userAgent, user }: GetEndpointParams) {
     if (!user)
         return { redirectTo: "/login" };
 
+    const db = await connectToDatabase();
     const quiz = await db.Quizzes.findOne({ status: { $in: [QuizStatus.Open, QuizStatus.Started] }, ownerUserId: user._id });
     if (!quiz)
         throw new EndpointError(404, "Quiz not found!");

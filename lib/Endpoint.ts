@@ -1,12 +1,10 @@
 import { ServerResponse } from "http";
-import { QuizDb } from "./Db";
 import { connectToDatabase } from "./DbUtils";
 import { ObjectId } from "mongodb";
 import { ServerSideHtml } from "./templates";
 import { createHash } from "crypto";
 
 interface EndpointParamsBase {
-    db: QuizDb;
     userAgent: string;
     host: string;
     user: User | null;
@@ -47,14 +45,12 @@ export function createEndpoint<B, Q>(options: {
             const query = request.query;
 
             let user: User | null = null;
-            console.time("DbConnect");
-            const db = await connectToDatabase();
-            console.timeEnd("DbConnect");
 
             console.time("Auth");
             let usedToken: StampedToken | null = null;
             let validTokens: StampedToken[] = [];
             if (userId) {
+                const db = await connectToDatabase();
                 user = await db.Users.findOne({ _id: new ObjectId(userId) });
                 if (user) {
                     const minDate = new Date();
@@ -76,9 +72,9 @@ export function createEndpoint<B, Q>(options: {
             console.time("Handler");
             let result
             if (request.method === "POST" && options.post)
-                result = await options.post({ body, db, user, userAgent, host, usedToken, validTokens });
+                result = await options.post({ body, user, userAgent, host, usedToken, validTokens });
             else if (request.method === "GET" && options.get)
-                result = await options.get({ query, db, user, userAgent, host, usedToken, validTokens });
+                result = await options.get({ query, user, userAgent, host, usedToken, validTokens });
             else
                 throw new EndpointError(400, "Invalid request");
             console.timeEnd("Handler");
