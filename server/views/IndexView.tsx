@@ -47,7 +47,7 @@ export function IndexView({ userAgent }: IndexViewParams) {
             </div>
             <h3>Step 3: Start quiz and share PIN code with the players</h3>
             <p class="description">
-                Press "Play" next to the quiz. Give your friends the PIN code and ask them to join the quiz at <a href="https://timerquiz.vercel.app">https://timerquiz.vercel.app</a>.
+                Press "Play" next to the quiz. Give your friends the PIN code and ask them to join the quiz at <a class="link" href="https://timerquiz.vercel.app">https://timerquiz.vercel.app</a>.
                 It works best when you're in the conf call together and you're sharing your screen.
             </p>
             <div class="screenshots">
@@ -103,8 +103,10 @@ IndexView.css = [
     }],
     {
         media: "(prefers-color-scheme: dark)",
-        styles: ["a.link", {
-            color: "#9ce3ff"
-        }]
+        styles: [
+            ["a.link", {
+                color: "#9ce3ff"
+            }]
+        ]
     }
 ] as InlineCSSRule[];
