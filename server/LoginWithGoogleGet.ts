@@ -76,7 +76,9 @@ export async function loginWithGoogleGet({ query, host }: GetEndpointParams<OAut
     hash.update(token);
     const hashedToken = hash.digest('base64');
 
-    await db.Users.updateOne({ _id: userId }, { $push: { loginTokens: { hashedToken, when: new Date() } } });
+    const csrfToken = randomBytes(16).toString("hex");
+
+    await db.Users.updateOne({ _id: userId }, { $push: { loginTokens: { hashedToken, csrfToken, when: new Date() } } });
 
     return { redirectTo: "/", setCookies: [ `userId=${userId}; path=/; HttpOnly`, `token=${token}; path=/; HttpOnly` ] };
 }

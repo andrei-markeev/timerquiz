@@ -1,5 +1,3 @@
-import { validateCsrfToken } from "../lib/CsrfToken";
-import { NonceType } from "../lib/Db";
 import { connectToDatabase } from "../lib/DbUtils";
 import { EndpointError, PostEndpointParams } from "../lib/Endpoint";
 
@@ -7,12 +5,13 @@ interface LogoutParams {
     action: string;
 }
 
-export async function logoutPost({ body, user }: PostEndpointParams<LogoutParams>) {
-    if (!user)
+export async function logoutPost({ body, user, usedToken }: PostEndpointParams<LogoutParams>) {
+    if (!user || !usedToken)
         throw new EndpointError(403, "Access denied!");
 
     const db = await connectToDatabase();
-    await validateCsrfToken(db, NonceType.DeleteAccountCsrf, body.csrfToken);
+    if (usedToken.csrfToken !== body.csrfToken)
+        throw new EndpointError(403, "Security validation failed!");
 
     if (body.action !== "purge")
         throw new EndpointError(400, "Invalid request!");

@@ -19,5 +19,5 @@ export enum QuizStatus {
 export enum NonceType {
     GoogleOAuth = 1,
     CreateQuizCsrf = 2,
-    DeleteAccountCsrf
+    DeleteAccountCsrf = 3
 }

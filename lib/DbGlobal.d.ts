@@ -12,6 +12,7 @@ declare global {
     interface StampedToken {
         hashedToken: string;
         when: Date
+        csrfToken: string;
     }
 
     interface Quiz {
