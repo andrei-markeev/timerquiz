@@ -53,7 +53,7 @@ export async function playPost({ body, userAgent }: PostEndpointParams<PlayParam
         if (body.ajax)
             return { text: "Wait" };
         else
-            return PleaseWaitView({ userAgent, quiz, participantId: body.participantId });
+            return PleaseWaitView({ userAgent, quiz, participantId: body.participantId, lastAnswerCorrect: participant.lastScoreAdd > 0 });
     }
 
     const question = await db.Questions.findOne({ _id: quiz.questionId });
@@ -64,7 +64,7 @@ export async function playPost({ body, userAgent }: PostEndpointParams<PlayParam
         if (body.ajax)
             return { text: "Wait" };
         else
-            return PleaseWaitView({ userAgent, quiz, participantId: body.participantId });
+            return PleaseWaitView({ userAgent, quiz, participantId: body.participantId, lastAnswerCorrect: participant.lastScoreAdd > 0 });
     }
 
     if (body.answer == null) {
@@ -78,11 +78,15 @@ export async function playPost({ body, userAgent }: PostEndpointParams<PlayParam
         throw new EndpointError(400, "Invalid request!");
 
     const now = Date.now();
-    if (question.correctAnswer === +body.answer)
-        participant.score += Math.floor(300 + 0.7 * Math.max(0, question.secondsToThink * 1000 - (now - quiz.questionStartMs)) / question.secondsToThink);
+    const isAnswerCorrect = question.correctAnswer === +body.answer;
+    const scoreAdd = isAnswerCorrect ? Math.floor(300 + 0.7 * Math.max(0, question.secondsToThink * 1000 - (now - quiz.questionStartMs)) / question.secondsToThink) : 0;
 
     await db.Quizzes.updateOne({ _id: quiz._id, "participants.id": participant.id }, {
-        $set: { "participants.$.score": participant.score, "participants.$.answeredMs": now },
+        $set: {
+            "participants.$.score": participant.score + scoreAdd,
+            "participants.$.answeredMs": now,
+            "participants.$.lastScoreAdd": scoreAdd
+        }
     })
-    return PleaseWaitView({ userAgent, quiz, participantId: body.participantId });
+    return PleaseWaitView({ userAgent, quiz, participantId: body.participantId, lastAnswerCorrect: isAnswerCorrect });
 }

@@ -33,7 +33,7 @@ function nth(number: number) {
         return "st";
     else if (lastDigit === 2)
         return "nd";
-    else if (lastDigit === 2)
+    else if (lastDigit === 3)
         return "rd";
     else
         return "th";

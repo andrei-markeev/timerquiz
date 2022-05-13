@@ -23,7 +23,7 @@ declare global {
         status: QuizStatus;
         questionId: ObjectId | null;
         questionStartMs: number;
-        participants: { id: string, name: string, score: number, answeredMs: number }[];
+        participants: { id: string, name: string, score: number, answeredMs: number, lastScoreAdd: number }[];
     }
 
     interface Question {

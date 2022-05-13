@@ -31,11 +31,11 @@ function flatten(arr: ChildElement[]): FlatChildElement[] {
     }, [] as any[]);
 }
 
-function escapeHtml(unsafe: string) {
+export function escapeHtml(unsafe: string) {
     return unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;");
 }
 
-function escapeHtmlAttribute(unsafe: boolean | string) {
+export function escapeHtmlAttribute(unsafe: boolean | string) {
     if (unsafe === true)
         return "";
     else if (unsafe === false)
@@ -48,10 +48,15 @@ function escapeHtmlAttribute(unsafe: boolean | string) {
 
 type SingleRule = readonly [ Readonly<string>, Readonly<Properties> ];
 type MediaQuery = { media: string, styles: Readonly<SingleRule[]> }
-export type InlineCSSRule = SingleRule | MediaQuery;
+type KeyFramesRule = { keyframes: string, steps: Readonly<SingleRule[]> }
+export type InlineCSSRule = SingleRule | MediaQuery | KeyFramesRule;
 
 function isMediaQuery(rule: InlineCSSRule): rule is MediaQuery {
     return "media" in rule;
+}
+
+function isKeyFramesRule(rule: InlineCSSRule): rule is KeyFramesRule {
+    return "keyframes" in rule;
 }
 
 function singleRuleToString(rule: SingleRule) {
@@ -76,6 +81,8 @@ export function inlineCSS(...objs: { css?: InlineCSSRule[] }[]) {
     for (const rule of rules) {
         if (isMediaQuery(rule)) {
             result += "@media " + rule.media + " {" + rule.styles.map(s => singleRuleToString(s)).join("") + "} ";
+        } else if (isKeyFramesRule(rule)) {
+            result += "@keyframes " + rule.keyframes + " {" + rule.steps.map(s => singleRuleToString(s)).join("") + "} ";
         } else
             result += singleRuleToString(rule);
     }

@@ -23,7 +23,7 @@ export async function joinPost({ body, userAgent }: PostEndpointParams<JoinParam
         return EnterPinView({ userAgent, error: "PIN incorrect!" });
 
     const participantId = Math.random().toString(32).substr(2);
-    await db.Quizzes.updateOne({ _id: quiz._id }, { $push: { participants: { id: participantId, name: body.name, score: 0, answeredMs: 0 } } });
+    await db.Quizzes.updateOne({ _id: quiz._id }, { $push: { participants: { id: participantId, name: body.name, score: 0, answeredMs: 0, lastScoreAdd: 0 } } });
 
     return WaitForQuizToStartView({ quiz, userAgent, participantId });
 }
