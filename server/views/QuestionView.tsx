@@ -44,6 +44,11 @@ QuestionView.css = [
     }],
     ["img", {
         width: "45vw",
+        maxWidth: "100%",
         height: "auto"
+    }],
+    [".btn", {
+        whiteSpace: "normal",
+        height: "100%"
     }]
 ] as InlineCSSRule[];
