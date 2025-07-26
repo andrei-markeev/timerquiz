@@ -41,7 +41,7 @@ export async function loginWithGoogleGet({ query, host }: GetEndpointParams<OAut
         }),
         {
             headers: { 
-                "Content-Type": "application/x-www-form-urlencoded"
+                "content-type": "application/x-www-form-urlencoded"
             }
         }
     );
