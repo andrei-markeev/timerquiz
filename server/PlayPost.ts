@@ -29,11 +29,12 @@ export async function playPost({ body, userAgent }: PostEndpointParams<PlayParam
     if (!quiz)
         throw new EndpointError(404, "Page not found");
 
-    const participantIndex = quiz.participants.findIndex(p => p.id === body.participantId);
+    const participantsSorted = quiz.participants.sort((a, b) => b.score - a.score);
+    const participantIndex = participantsSorted.findIndex(p => p.id === body.participantId);
     if (participantIndex === -1)
         throw new EndpointError(404, "Page not found");
 
-    const participant = quiz.participants[participantIndex];
+    const participant = participantsSorted[participantIndex];
 
     if (quiz.status === QuizStatus.Closed) {
         if (body.ajax)
