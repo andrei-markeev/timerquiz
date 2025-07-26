@@ -12,7 +12,6 @@
   "dependencies": {
     "@andrei-markeev/axios-mini": "^0.0.3",
     "@types/jws": "^3.2.10",
-    "@types/mongodb": "^4.0.7",
     "@types/node": "^22.16.5",
     "jws": "^4.0.0",
     "mongodb": "^6.18.0"
