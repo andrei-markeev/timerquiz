@@ -12,10 +12,5 @@
         { "source": "/logout", "destination": "/api/user/logout" },
         { "source": "/api/user/google", "destination": "/api/user/google" }
     ],
-    "regions": ["arn1"],
-    "env": {
-        "MONGO_URL": "@quiz-mongo-url",
-        "GOOGLE_APP_ID": "1023788359179-pueabr7n69fqs55sj8nfkg9ssvj3j54p.apps.googleusercontent.com",
-        "GOOGLE_APP_SECRET": "@quiz-google-app-secret"
-    }
+    "regions": ["arn1"]
 }

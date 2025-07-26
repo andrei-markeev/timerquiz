@@ -1,4 +1,4 @@
-import { MongoClient, Db } from "mongodb";
+import { MongoClient, Db, WithoutId } from "mongodb";
 import url from "url";
 
 let cachedDb: Db | null = null;
@@ -10,15 +10,15 @@ export async function connectToDatabase() {
         const dbname = url.parse(process.env.MONGO_URL).pathname?.substr(1);
         if (!dbname)
             throw new Error("Invalid MONGO_URL: db name is missing!");
-        const client = await MongoClient.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true });
+        const client = await MongoClient.connect(process.env.MONGO_URL);
         const db = await client.db(dbname);
         cachedDb = db;
         console.timeEnd("DbConnect");
     }
     return {
-        Questions: cachedDb.collection<Question>("questions"),
-        Quizzes: cachedDb.collection<Quiz>("quizzes"),
-        Users: cachedDb.collection<User>("user"),
-        Nonces: cachedDb.collection<Nonce>("nonce")
+        Questions: cachedDb.collection<WithoutId<Question>>("questions"),
+        Quizzes: cachedDb.collection<WithoutId<Quiz>>("quizzes"),
+        Users: cachedDb.collection<WithoutId<User>>("user"),
+        Nonces: cachedDb.collection<WithoutId<Nonce>>("nonce")
     }
 }

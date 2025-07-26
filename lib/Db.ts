@@ -1,10 +1,10 @@
-import { Collection } from "mongodb";
+import { Collection, WithoutId } from "mongodb";
 
 export interface QuizDb {
-    Users: Collection<User>;
-    Quizzes: Collection<Quiz>;
-    Questions: Collection<Question>;
-    Nonces: Collection<Nonce>;
+    Users: Collection<WithoutId<User>>;
+    Quizzes: Collection<WithoutId<Quiz>>;
+    Questions: Collection<WithoutId<Question>>;
+    Nonces: Collection<WithoutId<Nonce>>;
 }
 
 export enum QuizStatus {

@@ -10,15 +10,15 @@
     "deploy": "now"
   },
   "dependencies": {
-    "@types/jws": "^3.2.2",
-    "@types/mongodb": "^3.5.8",
-    "@types/node": "^13.11.1",
-    "axios": "^0.21.1",
+    "@andrei-markeev/axios-mini": "^0.0.3",
+    "@types/jws": "^3.2.10",
+    "@types/mongodb": "^4.0.7",
+    "@types/node": "^22.16.5",
     "jws": "^4.0.0",
-    "mongodb": "^3.6.3"
+    "mongodb": "^6.18.0"
   },
   "devDependencies": {
-    "csstype": "^2.6.10",
-    "typescript": "^3.8.3"
+    "csstype": "^2.6.21",
+    "typescript": "^5.8.3"
   }
 }

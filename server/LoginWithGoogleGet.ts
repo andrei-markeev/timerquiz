@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb";
 import { EndpointError, GetEndpointParams } from "../lib/Endpoint";
 import { decode } from "jws";
-import axios from "axios";
+import axios from "@andrei-markeev/axios-mini";
 import { createHash, randomBytes } from "crypto";
 import { stringify } from "querystring";
 import { isObjectIdHexString } from "../lib/Validators";
@@ -45,6 +45,10 @@ export async function loginWithGoogleGet({ query, host }: GetEndpointParams<OAut
             }
         }
     );
+    if (response.status >= 400) {
+        console.error("OAuth flow failed. Google returned", response);
+        throw new EndpointError(500, "Internal server error");
+    }
 
     var accessToken = response.data.access_token;
     var identityJWT = response.data.id_token;
@@ -56,6 +60,10 @@ export async function loginWithGoogleGet({ query, host }: GetEndpointParams<OAut
     }
 
     let decoded = decode(identityJWT);
+    if (!decoded) {
+        console.log('Payload could not be decoded!', identityJWT);
+        throw new EndpointError(500, "Internal server error");
+    }
     let userGoogleId = decoded.payload.sub.toLowerCase();
 
     console.log("Google user logged in:", userGoogleId);
